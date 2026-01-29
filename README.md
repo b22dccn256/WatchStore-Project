@@ -1,2 +1,2 @@
-# e-commerce-watch-store
+# WatchStore-Project
 Bộ Môn: Phát Triển Hệ Thống Thương Mại Điện Tử
