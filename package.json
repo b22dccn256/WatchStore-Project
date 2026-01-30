@@ -1,0 +1,25 @@
+{
+  "name": "watchstore-project",
+  "version": "1.0.0",
+  "description": "MERN Stack Watch Store",
+  "main": "index.js",
+  "scripts": {
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "Nguyen Duy Ha",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b22dccn256/WatchStore-Project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/b22dccn256/WatchStore-Project/issues"
+  },
+  "homepage": "https://github.com/b22dccn256/WatchStore-Project#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
