@@ -3,11 +3,11 @@ Bộ Môn: Phát Triển Hệ Thống Thương Mại Điện Tử
 BẢN ĐỒ TỔNG QUAN DỰ ÁN WATCHSTORE (6 Phases).
 
 Giai đoạn 1: Khởi tạo & Hiển thị (ĐÃ HOÀN THÀNH) 
-[x] - Cấu trúc thư mục Monorepo (Client/Server).
-[x] - Kết nối MongoDB & Seeding dữ liệu mẫu.
-[x] - Backend API cơ bản (Lấy danh sách sản phẩm).
-[x] - Frontend hiển thị danh sách & Chi tiết sản phẩm.
-[x] - Routing (Chuyển trang).
+- Cấu trúc thư mục Monorepo (Client/Server).                          [x] 
+- Kết nối MongoDB & Seeding dữ liệu mẫu.                              [x] 
+- Backend API cơ bản (Lấy danh sách sản phẩm).                        [x] 
+- Frontend hiển thị danh sách & Chi tiết sản phẩm.                    [x] 
+- Routing (Chuyển trang).                                             [x] 
 
 Giai đoạn 2: Trái tim của E-commerce - "Giỏ hàng thông minh"
 Công nghệ: React Context API (hoặc Redux Toolkit) + LocalStorage.
