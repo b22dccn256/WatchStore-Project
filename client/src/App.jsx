@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
-import CartPage from './pages/CartPage'; // <--- 1. Import trang mới
+import CartPage from './pages/CartPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
             {/* 2. Cập nhật dòng này */}
             <Route path="/cart" element={<CartPage />} />
 
-            <Route path="/login" element={<div className="text-center mt-10">Trang Đăng Nhập (Đang xây dựng)</div>} />
+            <Route path="/login" element={<LoginPage />} />
           </Routes>
         </main>
 

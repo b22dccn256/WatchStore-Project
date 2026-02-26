@@ -21,7 +21,7 @@ const HomePage = () => {
                     <div key={product._id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
                         <Link to={`/product/${product._id}`}>
                             <div className="relative h-64 bg-gray-200">
-                                <img src={product.image} alt={product.name} className="w-full h-full object-cover" onError={(e) => { e.target.src = 'https://via.placeholder.com/300x300?text=No+Image'; }} />
+                                <img src={product.image} alt={product.name} className="w-full h-full object-cover" onError={(e) => { e.target.src = '/images/no-image.png'; }} />
                             </div>
                         </Link>
                         <div className="p-4">
