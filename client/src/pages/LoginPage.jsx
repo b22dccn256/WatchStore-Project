@@ -22,7 +22,10 @@ const LoginPage = () => {
             // 1. Lưu thông tin user vào LocalStorage
             localStorage.setItem('userInfo', JSON.stringify(data));
             // 2. Chuyển hướng về trang chủ
-            navigate('/');
+            //navigate('/');
+            // Thay vì navigate, ta dùng lệnh này để ép trình duyệt tải lại và về trang chủ
+            // Điều này đảm bảo Header sẽ nhận diện được User mới đăng nhập
+            window.location.href = '/';
 
         } catch (err) {
             setError('Email hoặc mật khẩu không đúng!');
