@@ -11,6 +11,12 @@ export const CartProvider = ({ children }) => {
         return storedCart ? JSON.parse(storedCart) : [];
     });
 
+    // <--- THÊM MỚI: Khởi tạo state cho địa chỉ giao hàng
+    const [shippingAddress, setShippingAddress] = useState(() => {
+        const storedAddress = localStorage.getItem('shippingAddress');
+        return storedAddress ? JSON.parse(storedAddress) : {};
+    });
+
     // Logic: Mỗi khi cartItems thay đổi, tự động lưu lại vào LocalStorage
     useEffect(() => {
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
@@ -38,9 +44,30 @@ export const CartProvider = ({ children }) => {
     const removeFromCart = (id) => {
         setCartItems(cartItems.filter((x) => x._id !== id));
     };
+    // <--- THÊM MỚI: Hàm lưu địa chỉ giao hàng
+    const saveShippingAddress = (data) => {
+        setShippingAddress(data);
+        localStorage.setItem('shippingAddress', JSON.stringify(data));
+    };
+
+    // Khởi tạo state cho phương thức thanh toán (Mặc định là PayPal)
+    const [paymentMethod, setPaymentMethod] = useState(() => {
+        const storedMethod = localStorage.getItem('paymentMethod');
+        return storedMethod ? JSON.parse(storedMethod) : 'PayPal';
+    });
+
+    // Hàm lưu phương thức thanh toán
+    const savePaymentMethod = (data) => {
+        setPaymentMethod(data);
+        localStorage.setItem('paymentMethod', JSON.stringify(data));
+    };
 
     return (
-        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+        <CartContext.Provider value={{
+            cartItems, addToCart, removeFromCart,
+            shippingAddress, saveShippingAddress,
+            paymentMethod, savePaymentMethod
+        }}>
             {children}
         </CartContext.Provider>
     );
