@@ -44,6 +44,7 @@ export const CartProvider = ({ children }) => {
     const removeFromCart = (id) => {
         setCartItems(cartItems.filter((x) => x._id !== id));
     };
+
     // <--- THÊM MỚI: Hàm lưu địa chỉ giao hàng
     const saveShippingAddress = (data) => {
         setShippingAddress(data);
@@ -62,11 +63,18 @@ export const CartProvider = ({ children }) => {
         localStorage.setItem('paymentMethod', JSON.stringify(data));
     };
 
+    // Hàm dọn sạch giỏ hàng sau khi thanh toán thành công
+    const clearCart = () => {
+        setCartItems([]);
+        localStorage.removeItem('cartItems');
+    };
+
     return (
         <CartContext.Provider value={{
             cartItems, addToCart, removeFromCart,
             shippingAddress, saveShippingAddress,
-            paymentMethod, savePaymentMethod
+            paymentMethod, savePaymentMethod,
+            clearCart
         }}>
             {children}
         </CartContext.Provider>

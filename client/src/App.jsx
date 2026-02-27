@@ -8,6 +8,7 @@ import RegisterPage from './pages/RegisterPage';
 import ShippingPage from './pages/ShippingPage';
 import PaymentPage from './pages/PaymentPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
+import OrderDetailsPage from './pages/OrderDetailsPage';
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
             <Route path="/shipping" element={<ShippingPage />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/placeorder" element={<PlaceOrderPage />} />
+            <Route path="/order/:id" element={<OrderDetailsPage />} />
+
           </Routes>
         </main>
 

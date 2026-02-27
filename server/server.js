@@ -10,6 +10,8 @@ const connectDB = require('./config/db'); // Sẽ tạo ở bước sau
 
 const productRoutes = require('./routes/productRoutes'); // <--- 1. Import vào
 const userRoutes = require('./routes/userRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+
 // Cấu hình
 dotenv.config();
 const app = express();
@@ -23,6 +25,7 @@ app.use(cors()); // Chấp nhận request từ mọi nơi (hoặc config riêng 
 // Bất cứ request nào bắt đầu bằng /api/products sẽ chạy vào productRoutes
 app.use('/api/products', productRoutes); // <--- 2. Kích hoạt Route
 app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Database Connection
 connectDB(); // Tạm thời comment lại để test server chạy trước

@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
+import axios from 'axios';
 
 const PlaceOrderPage = () => {
     const { cartItems, shippingAddress, paymentMethod } = useContext(CartContext);
@@ -31,12 +32,50 @@ const PlaceOrderPage = () => {
     const totalPrice = itemsPrice + shippingPrice + taxPrice;
 
     // 3. Hàm Xử lý Đặt Hàng
-    const placeOrderHandler = () => {
-        // Tạm thời hiển thị thông báo. Ở bài sau chúng ta sẽ nối API Backend vào đây!
-        if (paymentMethod === 'QR') {
-            alert('Hệ thống sẽ tạo mã QR để bạn quét thanh toán ở bước tiếp theo!');
-        } else {
-            alert('Đang gửi dữ liệu đơn hàng xuống Server...');
+    // Nhớ lấy clearCart ra từ CartContext ở phía trên nhé:
+    // const { cartItems, shippingAddress, paymentMethod, clearCart } = useContext(CartContext);
+
+    const placeOrderHandler = async () => {
+        try {
+            // 1. Lấy Token của user đang đăng nhập
+            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+            // 2. Cấu hình Header chứa Token
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${userInfo.token}`,
+                },
+            };
+
+            // 3. Gọi API tạo đơn hàng
+            const { data } = await axios.post(
+                'http://localhost:5000/api/orders',
+                {
+                    // Map lại mảng: Giữ nguyên các trường cũ, nhưng tạo thêm trường 'product' lấy giá trị từ '_id'
+                    orderItems: cartItems.map((item) => ({
+                        ...item,
+                        product: item._id,
+                    })),
+                    shippingAddress,
+                    paymentMethod,
+                    itemsPrice,
+                    taxPrice,
+                    shippingPrice,
+                    totalPrice,
+                },
+                config
+            );
+
+            // 4. Nếu thành công -> Dọn giỏ hàng và chuyển sang trang Chi tiết đơn hàng
+            clearCart();
+            alert('🎉 Đặt hàng thành công!');
+            navigate(`/order/${data._id}`); // Chuyển hướng kèm theo ID của đơn hàng vừa tạo
+
+        } catch (error) {
+            alert(error.response && error.response.data.message
+                ? error.response.data.message
+                : 'Có lỗi xảy ra khi đặt hàng');
         }
     };
 
