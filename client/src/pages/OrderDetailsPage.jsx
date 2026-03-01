@@ -3,15 +3,17 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 
 const OrderDetailsPage = () => {
-    const { id } = useParams(); // Lấy ID từ URL
+    const { id } = useParams(); // <--- 1. LẤY ID TỪ URL Ở ĐÂY
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Lấy thông tin user để check quyền Admin
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const userInfo = JSON.parse(localStorage.getItem('userInfo'));
                 const config = {
                     headers: { Authorization: `Bearer ${userInfo.token}` },
                 };
@@ -26,14 +28,37 @@ const OrderDetailsPage = () => {
         };
 
         fetchOrder();
-    }, [id]);
+    }, [id, userInfo]);
+
+    // --- HÀM XỬ LÝ GIAO HÀNG (ADMIN) ---
+    const deliverHandler = async () => {
+        // Hỏi xác nhận trước khi bấm
+        if (!window.confirm('Xác nhận đơn hàng này đã được giao đến tay khách?')) {
+            return;
+        }
+
+        try {
+            const config = {
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+            };
+            // Gọi API cập nhật trạng thái
+            await axios.put(`http://localhost:5000/api/orders/${id}/deliver`, {}, config);
+
+            alert('Cập nhật trạng thái thành công!');
+            // Load lại trang để thấy thay đổi
+            window.location.reload();
+        } catch (err) {
+            alert('Lỗi: ' + (err.response && err.response.data.message ? err.response.data.message : err.message));
+        }
+    };
+    // ------------------------------------
 
     if (loading) return <div className="text-center py-10">Đang tải đơn hàng...</div>;
     if (error) return <div className="text-center text-red-500 py-10">{error}</div>;
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-2xl font-bold text-slate-800 mb-6">Đơn Hàng: {order._id}</h1>
+            <h1 className="text-2xl font-bold text-slate-800 mb-6">Đơn Hàng: <span className="text-amber-600">{order._id}</span></h1>
 
             <div className="flex flex-col lg:flex-row gap-8">
                 {/* CỘT TRÁI */}
@@ -48,11 +73,14 @@ const OrderDetailsPage = () => {
                             <strong className="text-gray-600">Địa chỉ:</strong> {order.shippingAddress.address}, {order.shippingAddress.city}, {order.shippingAddress.postalCode}
                         </p>
 
-                        {/* Trạng thái giao hàng */}
                         {order.isDelivered ? (
-                            <div className="bg-green-100 text-green-700 p-3 rounded">Đã giao hàng lúc {order.deliveredAt}</div>
+                            <div className="bg-green-100 text-green-700 p-3 rounded border border-green-200">
+                                ✅ Đã giao hàng lúc {order.deliveredAt.substring(0, 10)}
+                            </div>
                         ) : (
-                            <div className="bg-red-100 text-red-700 p-3 rounded">Chưa giao hàng</div>
+                            <div className="bg-red-100 text-red-700 p-3 rounded border border-red-200">
+                                ⏳ Chưa giao hàng
+                            </div>
                         )}
                     </div>
 
@@ -61,13 +89,12 @@ const OrderDetailsPage = () => {
                         <h2 className="text-xl font-bold text-slate-800 mb-4">Thanh Toán</h2>
                         <p className="mb-4"><strong className="text-gray-600">Phương thức:</strong> {order.paymentMethod}</p>
 
-                        {/* Logic hiển thị QR Code nếu chọn QR */}
+                        {/* Hiển thị QR Code nếu là thanh toán QR và chưa trả tiền */}
                         {order.paymentMethod === 'QR' && !order.isPaid && (
                             <div className="mb-4 text-center border-2 border-dashed border-amber-500 p-4 rounded bg-amber-50">
                                 <p className="font-bold text-amber-700 mb-2">Quét mã để thanh toán:</p>
-                                {/* Đây là ảnh QR Demo - Sau này bạn thay bằng link tạo QR động của VietQR */}
                                 <img
-                                    src={`https://img.vietqr.io/image/MB-662202092004-compact2.png?amount=${order.totalPrice}&addInfo=${order._id}&accountName=NGUYEN DUY HA`}
+                                    src={`https://img.vietqr.io/image/MB-0362145322-compact2.png?amount=${order.totalPrice}&addInfo=${order._id}&accountName=NGUYEN DUY HA`}
                                     alt="Mã QR Thanh Toán"
                                     className="mx-auto w-48 h-48 object-contain"
                                 />
@@ -76,9 +103,13 @@ const OrderDetailsPage = () => {
                         )}
 
                         {order.isPaid ? (
-                            <div className="bg-green-100 text-green-700 p-3 rounded">Đã thanh toán lúc {order.paidAt}</div>
+                            <div className="bg-green-100 text-green-700 p-3 rounded border border-green-200">
+                                ✅ Đã thanh toán lúc {order.paidAt.substring(0, 10)}
+                            </div>
                         ) : (
-                            <div className="bg-red-100 text-red-700 p-3 rounded">Chưa thanh toán</div>
+                            <div className="bg-red-100 text-red-700 p-3 rounded border border-red-200">
+                                ⏳ Chưa thanh toán
+                            </div>
                         )}
                     </div>
 
@@ -103,7 +134,7 @@ const OrderDetailsPage = () => {
                     </div>
                 </div>
 
-                {/* CỘT PHẢI: TỔNG KẾT */}
+                {/* CỘT PHẢI: TỔNG KẾT & ACTION */}
                 <div className="lg:w-1/3">
                     <div className="bg-white p-6 rounded-xl shadow-lg border-t-4 border-slate-900 sticky top-4">
                         <h2 className="text-xl font-bold text-slate-800 mb-6 text-center">Tổng Cộng</h2>
@@ -117,12 +148,25 @@ const OrderDetailsPage = () => {
                             </div>
                         </div>
 
-                        {/* Nút giả lập thanh toán (Dùng để test) */}
+                        {/* Nút giả lập thanh toán (Cho khách hàng) */}
                         {!order.isPaid && order.paymentMethod !== 'QR' && (
                             <button className="w-full bg-slate-900 text-white mt-6 py-3 rounded font-bold hover:bg-amber-600 transition">
                                 Thanh Toán Ngay (PayPal)
                             </button>
                         )}
+
+                        {/* --- NÚT ADMIN: ĐÁNH DẤU ĐÃ GIAO --- */}
+                        {/* Điều kiện: Là Admin + Đã trả tiền + CHƯA giao hàng */}
+                        {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                            <button
+                                onClick={deliverHandler}
+                                className="w-full bg-emerald-600 text-white mt-4 py-3 rounded font-bold hover:bg-emerald-700 transition shadow-lg"
+                            >
+                                ĐÁNH DẤU ĐÃ GIAO HÀNG 🚚
+                            </button>
+                        )}
+                        {/* ----------------------------------- */}
+
                     </div>
                 </div>
             </div>

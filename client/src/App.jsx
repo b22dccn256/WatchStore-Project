@@ -16,6 +16,7 @@ import ProfilePage from './pages/ProfilePage';
 import UserListPage from './pages/UserListPage';
 import ProductListPage from './pages/ProductListPage';
 import ProductEditPage from './pages/ProductEditPage';
+import OrderListPage from './pages/OrderListPage';
 
 function App() {
   return (
@@ -41,8 +42,7 @@ function App() {
               <Route path="/admin/users" element={<UserListPage />} />
               <Route path="/admin/products" element={<ProductListPage />} />
               <Route path="/admin/product/:id/edit" element={<ProductEditPage />} />
-              <Route path="/admin/orders" element={<div className="p-10 text-center">Trang Quản lý Đơn hàng (Đang làm)</div>} />
-
+              <Route path="/admin/orders" element={<OrderListPage />} />
             </Routes>
           </main>
 

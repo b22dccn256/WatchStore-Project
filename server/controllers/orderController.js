@@ -78,4 +78,42 @@ const getMyOrders = async (req, res) => {
     res.json(orders);
 };
 
-module.exports = { addOrderItems, getOrderById, getMyOrders };
+// @desc    Lấy tất cả đơn hàng (Admin)
+// @route   GET /api/orders
+// @access  Private/Admin
+const getOrders = async (req, res) => {
+    // Lấy tất cả, nối bảng User để biết tên người mua
+    const orders = await Order.find({}).populate('user', 'id name');
+    res.json(orders);
+};
+
+// @desc    Cập nhật trạng thái Đã Giao Hàng
+// @route   PUT /api/orders/:id/deliver
+// @access  Private/Admin
+const updateOrderToDelivered = async (req, res) => {
+    // CÁCH CŨ (Gây lỗi): const order = await Order.findById... order.save()
+
+    // CÁCH MỚI (An toàn hơn): Cập nhật trực tiếp vào Database, bỏ qua kiểm tra lỗi vặt
+    const updatedOrder = await Order.findByIdAndUpdate(
+        req.params.id,
+        {
+            isDelivered: true,
+            deliveredAt: Date.now()
+        },
+        { new: true } // Trả về kết quả mới nhất sau khi update
+    );
+
+    if (updatedOrder) {
+        res.json(updatedOrder);
+    } else {
+        res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+    }
+};
+
+module.exports = {
+    addOrderItems,
+    getOrderById,
+    getMyOrders,
+    getOrders,
+    updateOrderToDelivered
+};
