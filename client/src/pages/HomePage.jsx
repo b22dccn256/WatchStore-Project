@@ -1,20 +1,45 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+
 
 const HomePage = () => {
+    const { keyword } = useParams(); // <--- 2. Lấy keyword từ URL
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const { data } = await axios.get('http://localhost:5000/api/products');
-            setProducts(data);
+            setLoading(true);
+            try {
+                // 3. Logic gọi API: Nếu có keyword thì thêm vào URL
+                const url = keyword
+                    ? `http://localhost:5000/api/products?keyword=${keyword}`
+                    : 'http://localhost:5000/api/products';
+
+                const { data } = await axios.get(url);
+                setProducts(data);
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
         };
+
         fetchProducts();
-    }, []);
+    }, [keyword]); // <--- 4. Chạy lại useEffect mỗi khi keyword thay đổi
 
     return (
         <div className="container mx-auto px-4 py-8">
+            {/* Nếu đang tìm kiếm thì hiện nút quay lại */}
+            {keyword && (
+                <Link to="/" className="inline-block mb-4 text-slate-600 hover:text-amber-600">← Quay lại tất cả sản phẩm</Link>
+            )}
+
+            <h1 className="text-2xl font-bold border-l-4 border-amber-500 pl-4 mb-8 text-slate-800">
+                {keyword ? `Kết quả tìm kiếm: "${keyword}"` : 'Sản Phẩm Mới Nhất'}
+            </h1>
             <h2 className="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-amber-500 pl-3">Sản Phẩm Mới Nhất</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {products.map((product) => (

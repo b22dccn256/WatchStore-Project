@@ -1,15 +1,25 @@
 const Product = require('../models/Product');
 
-// @desc    Lấy tất cả sản phẩm
-// @route   GET /api/products
+// @desc    Lấy tất cả sản phẩm (Có hỗ trợ tìm kiếm)
+// @route   GET /api/products?keyword=...
 // @access  Public
 const getProducts = async (req, res) => {
-    try {
-        const products = await Product.find({}); // Lấy tất cả, không lọc
-        res.json(products); // Trả về dạng JSON
-    } catch (error) {
-        res.status(500).json({ message: 'Lỗi Server: Không lấy được danh sách sản phẩm' });
-    }
+    // 1. Xử lý từ khóa tìm kiếm
+    const keyword = req.query.keyword
+        ? {
+            name: {
+                $regex: req.query.keyword, // Tìm gần đúng
+                $options: 'i',             // Không phân biệt hoa thường
+            },
+        }
+        : {};
+
+    // 2. Truy vấn Database với từ khóa
+    // Nếu keyword rỗng -> Tìm tất cả ({})
+    // Nếu có keyword -> Tìm theo tên
+    const products = await Product.find({ ...keyword });
+
+    res.json(products);
 };
 
 // @desc    Lấy 1 sản phẩm theo ID
@@ -87,6 +97,7 @@ const updateProduct = async (req, res) => {
         res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
     }
 };
+
 
 module.exports = {
     getProducts,

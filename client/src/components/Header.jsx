@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
+import SearchBox from './SearchBox';
 
 const Header = () => {
     const { cartItems } = useContext(CartContext);
@@ -27,9 +28,13 @@ const Header = () => {
         <header className="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
                 {/* Logo */}
-                <Link to="/" className="text-2xl font-bold text-amber-500 flex items-center gap-2">
-                    <span>⌚</span> WatchStore
+                <Link to="/" className="text-2xl font-bold text-amber-500 flex items-center gap-2 mr-4">
+                    <span>⌚</span> <span className="hidden sm:block">WatchStore</span>
                 </Link>
+
+                <div className="hidden sm:block flex-grow">
+                    <SearchBox />
+                </div>
 
                 {/* Menu giữa */}
                 <nav className="hidden md:flex space-x-8 font-medium">
@@ -87,6 +92,12 @@ const Header = () => {
                     )}
                 </div>
             </div>
+
+            {/* 3. (Tùy chọn) Thanh tìm kiếm cho Mobile hiển thị bên dưới */}
+            <div className="sm:hidden px-4 pb-4">
+                <SearchBox />
+            </div>
+
         </header>
     );
 };

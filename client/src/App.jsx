@@ -27,6 +27,9 @@ function App() {
           <main className="py-4">
             <Routes>
               <Route path="/" element={<HomePage />} />
+              {/* THÊM ROUTE TÌM KIẾM: Nó vẫn dùng HomePage để hiển thị */}
+              <Route path="/search/:keyword" element={<HomePage />} />
+
               <Route path="/product/:id" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/login" element={<LoginPage />} />
@@ -43,6 +46,8 @@ function App() {
               <Route path="/admin/products" element={<ProductListPage />} />
               <Route path="/admin/product/:id/edit" element={<ProductEditPage />} />
               <Route path="/admin/orders" element={<OrderListPage />} />
+
+
             </Routes>
           </main>
 
