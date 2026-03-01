@@ -39,3 +39,9 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server đang chạy tại port ${PORT}`);
 });
+
+app._router.stack.forEach(function (r) {
+    if (r.route && r.route.path) {
+        console.log(r.route.path)
+    }
+})

@@ -35,10 +35,12 @@ const protect = async (req, res, next) => {
 // Middleware 2: Kiểm tra quyền Admin (THÊM MỚI)
 const admin = (req, res, next) => {
     if (req.user && req.user.isAdmin) {
-        next();
+        // Nếu user tồn tại VÀ có cờ isAdmin = true
+        next(); // Cho phép đi tiếp
     } else {
         res.status(401).json({ message: 'Chỉ dành cho Admin' });
     }
 };
+
 
 module.exports = { protect, admin };
