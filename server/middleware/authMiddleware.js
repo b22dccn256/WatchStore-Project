@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+// Middleware 1: Kiểm tra Đăng nhập (Giữ nguyên code cũ)
 const protect = async (req, res, next) => {
     let token;
 
@@ -31,7 +32,7 @@ const protect = async (req, res, next) => {
         res.status(401).json({ message: 'Không có quyền truy cập, thiếu Token' });
     }
 };
-
+// Middleware 2: Kiểm tra quyền Admin (THÊM MỚI)
 const admin = (req, res, next) => {
     if (req.user && req.user.isAdmin) {
         next();

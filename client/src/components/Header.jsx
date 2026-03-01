@@ -52,7 +52,23 @@ const Header = () => {
                     {/* LOGIC USER: Đã đăng nhập vs Chưa đăng nhập */}
                     {userInfo ? (
                         <div className="flex items-center gap-4">
-                            {/* Link dẫn đến trang Profile */}
+
+                            {/* --- MENU ADMIN (Chỉ hiện nếu là Admin) --- */}
+                            {userInfo.isAdmin && (
+                                <div className="flex gap-3 mr-4 border-r border-gray-600 pr-4">
+                                    <Link to="/admin/users" className="text-sm font-bold text-gray-300 hover:text-white uppercase">
+                                        Users
+                                    </Link>
+                                    <Link to="/admin/products" className="text-sm font-bold text-gray-300 hover:text-white uppercase">
+                                        Products
+                                    </Link>
+                                    <Link to="/admin/orders" className="text-sm font-bold text-gray-300 hover:text-white uppercase">
+                                        Orders
+                                    </Link>
+                                </div>
+                            )}
+                            {/* ------------------------------------------ */}
+
                             <Link to="/profile" className="text-amber-400 font-bold hover:underline">
                                 Hi, {userInfo.name}
                             </Link>

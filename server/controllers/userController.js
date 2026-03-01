@@ -81,4 +81,12 @@ const getUserProfile = async (req, res) => {
     }
 };
 
-module.exports = { authUser, getUserProfile, registerUser };
+// @desc    Lấy danh sách tất cả người dùng
+// @route   GET /api/users
+// @access  Private/Admin
+const getUsers = async (req, res) => {
+    const users = await User.find({});
+    res.json(users);
+};
+
+module.exports = { authUser, getUserProfile, registerUser, getUsers };

@@ -13,6 +13,7 @@ import PaymentPage from './pages/PaymentPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
 import OrderDetailsPage from './pages/OrderDetailsPage';
 import ProfilePage from './pages/ProfilePage';
+import UserListPage from './pages/UserListPage';
 
 function App() {
   return (
@@ -33,6 +34,11 @@ function App() {
               <Route path="/placeorder" element={<PlaceOrderPage />} />
               <Route path="/order/:id" element={<OrderDetailsPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+
+              {/* Route dành cho Admin */}
+              <Route path="/admin/users" element={<UserListPage />} />
+              <Route path="/admin/products" element={<div className="p-10 text-center">Trang Quản lý Sản phẩm (Đang làm)</div>} />
+              <Route path="/admin/orders" element={<div className="p-10 text-center">Trang Quản lý Đơn hàng (Đang làm)</div>} />
 
             </Routes>
           </main>
