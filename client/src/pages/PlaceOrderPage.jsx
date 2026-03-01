@@ -4,7 +4,7 @@ import { CartContext } from '../context/CartContext';
 import axios from 'axios';
 
 const PlaceOrderPage = () => {
-    const { cartItems, shippingAddress, paymentMethod } = useContext(CartContext);
+    const { cartItems, shippingAddress, paymentMethod, clearCart } = useContext(CartContext);
     const navigate = useNavigate();
 
     // 1. Logic Bảo vệ: Nếu chưa có phương thức thanh toán hoặc địa chỉ thì đuổi về

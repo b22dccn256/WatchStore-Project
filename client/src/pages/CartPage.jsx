@@ -17,9 +17,17 @@ const CartPage = () => {
     };
 
     const checkoutHandler = () => {
-        // Logic: Kiểm tra đăng nhập (sẽ làm ở Giai đoạn 3)
-        // Tạm thời chuyển hướng sang trang đăng nhập
-        navigate('/login?redirect=shipping');
+        // Kiểm tra xem đã đăng nhập chưa?
+        const userInfo = localStorage.getItem('userInfo');
+
+        if (userInfo) {
+            // Nếu ĐÃ đăng nhập -> Đi thẳng đến trang Giao hàng
+            navigate('/shipping');
+        } else {
+            // Nếu CHƯA đăng nhập -> Đến trang Login, nhưng kèm theo lời nhắn:
+            // "Đăng nhập xong thì quay lại trang shipping nhé" (?redirect=shipping)
+            navigate('/login?redirect=shipping');
+        }
     };
 
     return (

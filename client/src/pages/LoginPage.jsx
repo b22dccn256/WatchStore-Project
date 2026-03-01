@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const LoginPage = () => {
@@ -7,6 +7,11 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    // 1. Lấy tham số 'redirect' từ URL (ví dụ: /login?redirect=shipping)
+    const { search } = useLocation();
+    const redirectInUrl = new URLSearchParams(search).get('redirect');
+    const redirect = redirectInUrl ? `/${redirectInUrl}` : '/';
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -25,7 +30,7 @@ const LoginPage = () => {
             //navigate('/');
             // Thay vì navigate, ta dùng lệnh này để ép trình duyệt tải lại và về trang chủ
             // Điều này đảm bảo Header sẽ nhận diện được User mới đăng nhập
-            window.location.href = '/';
+            window.location.href = redirect;
 
         } catch (err) {
             setError('Email hoặc mật khẩu không đúng!');
