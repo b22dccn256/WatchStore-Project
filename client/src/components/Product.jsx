@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { formatCurrency } from '../utils/format'; // Nhớ import hàm format tiền
+import { formatCurrency } from '../utils/format';
 import { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 
@@ -46,8 +46,8 @@ const Product = ({ product }) => {
                     </Link>
 
                     {/* Giá tiền màu Vàng Gold */}
-                    <p className="text-accent font-bold text-lg mb-4 font-sans">
-                        {formatCurrency(product.price)}
+                    <p className="text-[#d4b871] font-bold text-xl mb-4 font-sans">
+                        {formatCurrency(product.price)} {/* <--- Dùng hàm */}
                     </p>
                 </div>
 

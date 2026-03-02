@@ -21,10 +21,10 @@ const HomePage = () => {
                 const currentPage = pageNumber || 1;
 
                 // Logic gọi API: Nếu có keyword thì thêm vào URL
-                const url = keyword
-                    ? `http://localhost:5000/api/products?keyword=${keyword}`
-                    : 'http://localhost:5000/api/products';
-
+                let url = `http://localhost:5000/api/products?pageNumber=${currentPage}`;
+                if (keyword) {
+                    url += `&keyword=${keyword}`;
+                }
                 const { data } = await axios.get(url);
                 // Xử lý dữ liệu trả về (Mảng hoặc Object phân trang)
                 if (Array.isArray(data)) {
@@ -35,6 +35,7 @@ const HomePage = () => {
                     setPage(data.page);
                 }
                 setLoading(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (err) {
                 setError(err.message);
                 setLoading(false);

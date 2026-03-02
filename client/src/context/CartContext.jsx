@@ -1,81 +1,63 @@
 import { createContext, useState, useEffect } from 'react';
+import { formatCurrency } from '../utils/format';
 
-// 1. Tạo Context (Cái khung chứa)
 export const CartContext = createContext();
 
-// 2. Tạo Provider (Người cung cấp dữ liệu)
 export const CartProvider = ({ children }) => {
-    // Logic: Lấy dữ liệu từ LocalStorage ra trước (để F5 không bị mất)
-    const [cartItems, setCartItems] = useState(() => {
-        const storedCart = localStorage.getItem('cartItems');
-        return storedCart ? JSON.parse(storedCart) : [];
-    });
+    // Lấy giỏ hàng từ LocalStorage khi mới vào web
+    const [cartItems, setCartItems] = useState(
+        localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : []
+    );
 
-    // <--- THÊM MỚI: Khởi tạo state cho địa chỉ giao hàng
-    const [shippingAddress, setShippingAddress] = useState(() => {
-        const storedAddress = localStorage.getItem('shippingAddress');
-        return storedAddress ? JSON.parse(storedAddress) : {};
-    });
-
-    // Logic: Mỗi khi cartItems thay đổi, tự động lưu lại vào LocalStorage
+    // Hàm cập nhật LocalStorage mỗi khi cartItems thay đổi
     useEffect(() => {
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
     }, [cartItems]);
 
-    // --- HÀM 1: THÊM VÀO GIỎ ---
-    const addToCart = (product, qty) => {
-        const newItem = { ...product, qty };
-
-        // Kiểm tra xem sản phẩm này đã có trong giỏ chưa?
+    // --- SỬA LẠI HÀM THÊM VÀO GIỎ ---
+    const addToCart = (product, qty = 1) => {
+        // 1. Kiểm tra xem sản phẩm này đã có trong giỏ chưa
         const existItem = cartItems.find((x) => x._id === product._id);
 
         if (existItem) {
-            // Nếu có rồi -> Chỉ cập nhật lại số lượng (ghi đè item cũ bằng item mới)
-            setCartItems(cartItems.map((x) =>
-                x._id === existItem._id ? newItem : x
-            ));
+            // 2. Nếu ĐÃ CÓ -> Cộng dồn số lượng (Số cũ + Số mới)
+            const newQty = existItem.qty + qty;
+
+            // Kiểm tra tồn kho (nếu cần)
+            if (newQty > product.countInStock) {
+                alert('Xin lỗi, bạn đã thêm quá số lượng tồn kho!');
+                return;
+            }
+
+            setCartItems(
+                cartItems.map((x) =>
+                    x._id === existItem._id ? { ...existItem, qty: newQty } : x
+                )
+            );
         } else {
-            // Nếu chưa có -> Thêm mới vào mảng
-            setCartItems([...cartItems, newItem]);
+            // 3. Nếu CHƯA CÓ -> Thêm mới vào
+            setCartItems([...cartItems, { ...product, qty }]);
         }
     };
 
-    // --- HÀM 2: XÓA KHỎI GIỎ ---
     const removeFromCart = (id) => {
         setCartItems(cartItems.filter((x) => x._id !== id));
     };
 
-    // <--- THÊM MỚI: Hàm lưu địa chỉ giao hàng
-    const saveShippingAddress = (data) => {
-        setShippingAddress(data);
-        localStorage.setItem('shippingAddress', JSON.stringify(data));
+    // Hàm cập nhật số lượng trực tiếp (dùng trong trang Giỏ hàng)
+    const updateCartQty = (id, qty) => {
+        setCartItems(
+            cartItems.map((x) => (x._id === id ? { ...x, qty: Number(qty) } : x))
+        );
     };
 
-    // Khởi tạo state cho phương thức thanh toán (Mặc định là PayPal)
-    const [paymentMethod, setPaymentMethod] = useState(() => {
-        const storedMethod = localStorage.getItem('paymentMethod');
-        return storedMethod ? JSON.parse(storedMethod) : 'PayPal';
-    });
-
-    // Hàm lưu phương thức thanh toán
-    const savePaymentMethod = (data) => {
-        setPaymentMethod(data);
-        localStorage.setItem('paymentMethod', JSON.stringify(data));
-    };
-
-    // Hàm dọn sạch giỏ hàng sau khi thanh toán thành công
     const clearCart = () => {
         setCartItems([]);
         localStorage.removeItem('cartItems');
     };
 
     return (
-        <CartContext.Provider value={{
-            cartItems, addToCart, removeFromCart,
-            shippingAddress, saveShippingAddress,
-            paymentMethod, savePaymentMethod,
-            clearCart
-        }}>
+        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateCartQty, clearCart }}>
             {children}
         </CartContext.Provider>
     );

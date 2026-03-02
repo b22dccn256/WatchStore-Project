@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-//import Footer from './components/Footer'; // (Nếu bạn chưa có Footer thì tạm bỏ dòng này)
+import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
@@ -12,6 +12,9 @@ import OrderDetailsPage from './pages/OrderDetailsPage';
 import ProductListPage from './pages/ProductListPage';
 import ProductEditPage from './pages/ProductEditPage';
 import UserListPage from './pages/UserListPage'; // Nếu có
+import ProfilePage from './pages/ProfilePage';
+import OrderListPage from './pages/OrderListPage'; // Import trang quản lý đơn hàng
+
 // Import các trang khác của bạn...
 
 function App() {
@@ -36,6 +39,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
+
+          <Route path="/profile" element={<ProfilePage />} />
           {/* Private Routes */}
           <Route path="/shipping" element={<ShippingPage />} />
           <Route path="/placeorder" element={<PlaceOrderPage />} />
@@ -46,15 +51,12 @@ function App() {
           <Route path="/admin/productlist/:pageNumber" element={<ProductListPage />} />
           <Route path="/admin/product/:id/edit" element={<ProductEditPage />} />
           <Route path="/admin/users" element={<UserListPage />} />
+          <Route path="/admin/orders" element={<OrderListPage />} />
         </Routes>
       </main>
 
       {/* 3. FOOTER */}
-      <footer className="bg-primary text-white py-6 mt-auto">
-        <div className="container mx-auto text-center">
-          Copyright &copy; 2026 WatchStore Premium
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
