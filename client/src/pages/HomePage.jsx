@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import Paginate from '../components/Paginate';
+import Meta from '../components/Meta';
+
 
 const HomePage = () => {
     const { keyword, pageNumber } = useParams();
@@ -39,6 +41,14 @@ const HomePage = () => {
 
     return (
         <div className="container mx-auto px-4 py-8">
+            {/* Thêm Meta vào đầu trang */}
+            {/* Nếu có keyword tìm kiếm -> Đổi tiêu đề tab */}
+            {!keyword ? (
+                <Meta />
+            ) : (
+                <Meta title={`Tìm kiếm: ${keyword} | WatchStore`} />
+            )}
+
             {keyword && (
                 <Link to="/" className="inline-block mb-4 text-slate-600 hover:text-amber-600">← Quay lại tất cả sản phẩm</Link>
             )}

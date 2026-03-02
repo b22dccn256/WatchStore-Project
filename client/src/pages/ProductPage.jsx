@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom'; // Thêm useNavigate
 import axios from 'axios';
 import { CartContext } from '../context/CartContext';
+import Meta from '../components/Meta';
 
 const ProductPage = () => {
     const { id } = useParams();
@@ -81,6 +82,9 @@ const ProductPage = () => {
             <Link to="/" className="text-gray-600 hover:text-gray-900 mb-6 inline-block">
                 &larr; Quay lại
             </Link>
+
+            {/* 1. Thêm Meta động dựa theo tên sản phẩm */}
+            {product && <Meta title={product.name} description={product.description} />}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 {/* Ảnh sản phẩm */}
