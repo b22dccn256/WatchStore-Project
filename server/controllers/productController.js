@@ -1,25 +1,37 @@
 const Product = require('../models/Product');
 
-// @desc    Lấy tất cả sản phẩm (Có hỗ trợ tìm kiếm)
-// @route   GET /api/products?keyword=...
+// @desc    Lấy tất cả sản phẩm (Có Tìm kiếm & Phân trang)
+// @route   GET /api/products?keyword=...&pageNumber=...
 // @access  Public
 const getProducts = async (req, res) => {
-    // 1. Xử lý từ khóa tìm kiếm
+    // 1. Cấu hình phân trang
+    const pageSize = 8; // Hiện 8 sản phẩm mỗi trang
+    const page = Number(req.query.pageNumber) || 1; // Trang hiện tại (mặc định là 1)
+
+    // 2. Xử lý từ khóa tìm kiếm (Giữ nguyên)
     const keyword = req.query.keyword
         ? {
             name: {
-                $regex: req.query.keyword, // Tìm gần đúng
-                $options: 'i',             // Không phân biệt hoa thường
+                $regex: req.query.keyword,
+                $options: 'i',
             },
         }
         : {};
 
-    // 2. Truy vấn Database với từ khóa
-    // Nếu keyword rỗng -> Tìm tất cả ({})
-    // Nếu có keyword -> Tìm theo tên
-    const products = await Product.find({ ...keyword });
+    // 3. Đếm tổng số sản phẩm khớp với từ khóa
+    const count = await Product.countDocuments({ ...keyword });
 
-    res.json(products);
+    // 4. Lấy sản phẩm theo trang (Bỏ qua các trang trước đó)
+    const products = await Product.find({ ...keyword })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1));
+
+    // 5. Trả về: Danh sách sp, Trang hiện tại, Tổng số trang
+    res.json({
+        products,
+        page,
+        pages: Math.ceil(count / pageSize)
+    });
 };
 
 // @desc    Lấy 1 sản phẩm theo ID
@@ -142,6 +154,8 @@ const createProductReview = async (req, res) => {
         res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
     }
 };
+
+
 
 module.exports = {
     getProducts,

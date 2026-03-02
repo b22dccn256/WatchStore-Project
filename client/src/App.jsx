@@ -27,8 +27,15 @@ function App() {
           <main className="py-4">
             <Routes>
               <Route path="/" element={<HomePage />} />
+
+              {/* Trang chủ có số trang (Ví dụ: /page/2) */}
+              <Route path="/page/:pageNumber" element={<HomePage />} />
+
               {/* THÊM ROUTE TÌM KIẾM: Nó vẫn dùng HomePage để hiển thị */}
               <Route path="/search/:keyword" element={<HomePage />} />
+
+              {/* Tìm kiếm có số trang (Ví dụ: /search/Rolex/page/2) */}
+              <Route path="/search/:keyword/page/:pageNumber" element={<HomePage />} />
 
               <Route path="/product/:id" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
