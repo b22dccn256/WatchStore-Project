@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import SearchBox from './SearchBox';
+import { FaShoppingCart, FaUser, FaBars } from 'react-icons/fa';
 
 const Header = () => {
     const { cartItems } = useContext(CartContext);

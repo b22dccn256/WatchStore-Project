@@ -1,70 +1,61 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-import { CartProvider } from './context/CartContext';
-
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
+//import Footer from './components/Footer'; // (Nếu bạn chưa có Footer thì tạm bỏ dòng này)
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ShippingPage from './pages/ShippingPage';
-import PaymentPage from './pages/PaymentPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
 import OrderDetailsPage from './pages/OrderDetailsPage';
-import ProfilePage from './pages/ProfilePage';
-import UserListPage from './pages/UserListPage';
 import ProductListPage from './pages/ProductListPage';
 import ProductEditPage from './pages/ProductEditPage';
-import OrderListPage from './pages/OrderListPage';
+import UserListPage from './pages/UserListPage'; // Nếu có
+// Import các trang khác của bạn...
 
 function App() {
   return (
-    <CartProvider>
-      <Router>
-        <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
-          <Header />
-          <main className="py-4">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
+    // 👇 Wrapper ngoài cùng phải là flex column và full màn hình
+    <div className="flex flex-col min-h-screen bg-secondary font-sans text-gray-900">
 
-              {/* Trang chủ có số trang (Ví dụ: /page/2) */}
-              <Route path="/page/:pageNumber" element={<HomePage />} />
+      {/* 1. HEADER: Nằm ngoài container để tràn viền */}
+      <Header />
 
-              {/* THÊM ROUTE TÌM KIẾM: Nó vẫn dùng HomePage để hiển thị */}
-              <Route path="/search/:keyword" element={<HomePage />} />
+      {/* 2. MAIN CONTENT: Phần này mới chứa nội dung thay đổi */}
+      <main className="flex-grow w-full">
+        {/* Lưu ý: Không dùng class 'container' ở đây để cho phép Banner tràn viền */}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/search/:keyword" element={<HomePage />} />
+          <Route path="/page/:pageNumber" element={<HomePage />} />
+          <Route path="/search/:keyword/page/:pageNumber" element={<HomePage />} />
 
-              {/* Tìm kiếm có số trang (Ví dụ: /search/Rolex/page/2) */}
-              <Route path="/search/:keyword/page/:pageNumber" element={<HomePage />} />
+          <Route path="/product/:id" element={<ProductPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-              <Route path="/product/:id" element={<ProductPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
+          {/* Private Routes */}
+          <Route path="/shipping" element={<ShippingPage />} />
+          <Route path="/placeorder" element={<PlaceOrderPage />} />
+          <Route path="/order/:id" element={<OrderDetailsPage />} />
 
-              <Route path="/shipping" element={<ShippingPage />} />
-              <Route path="/payment" element={<PaymentPage />} />
-              <Route path="/placeorder" element={<PlaceOrderPage />} />
-              <Route path="/order/:id" element={<OrderDetailsPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
+          {/* Admin Routes */}
+          <Route path="/admin/products" element={<ProductListPage />} />
+          <Route path="/admin/productlist/:pageNumber" element={<ProductListPage />} />
+          <Route path="/admin/product/:id/edit" element={<ProductEditPage />} />
+          <Route path="/admin/users" element={<UserListPage />} />
+        </Routes>
+      </main>
 
-              {/* Route dành cho Admin */}
-              <Route path="/admin/users" element={<UserListPage />} />
-              <Route path="/admin/products" element={<ProductListPage />} />
-              <Route path="/admin/product/:id/edit" element={<ProductEditPage />} />
-              <Route path="/admin/orders" element={<OrderListPage />} />
-              <Route path="/admin/productlist/:pageNumber" element={<ProductListPage />} />
-
-            </Routes>
-          </main>
-
-          {/* Footer (Giữ nguyên) */}
-          <footer className="bg-slate-900 text-slate-400 text-center py-6 mt-10">
-            <p>Copyright © 2026 WatchStore Project</p>
-          </footer>
+      {/* 3. FOOTER */}
+      <footer className="bg-primary text-white py-6 mt-auto">
+        <div className="container mx-auto text-center">
+          Copyright &copy; 2026 WatchStore Premium
         </div>
-      </Router>
-    </CartProvider>
+      </footer>
+    </div>
   );
 }
 

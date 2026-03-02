@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
 
 const SearchBox = () => {
     const [keyword, setKeyword] = useState('');
@@ -8,7 +9,6 @@ const SearchBox = () => {
     const submitHandler = (e) => {
         e.preventDefault();
         if (keyword.trim()) {
-            // Điều hướng sang trang chủ kèm từ khóa
             navigate(`/search/${keyword}`);
         } else {
             navigate('/');
@@ -16,19 +16,16 @@ const SearchBox = () => {
     };
 
     return (
-        <form onSubmit={submitHandler} className="flex flex-grow max-w-lg mx-4">
+        <form onSubmit={submitHandler} className="flex items-center w-full max-w-lg bg-white rounded-full overflow-hidden shadow-inner border border-gray-200">
             <input
                 type="text"
                 name="q"
                 onChange={(e) => setKeyword(e.target.value)}
-                placeholder="Tìm kiếm đồng hồ..."
-                className="w-full px-4 py-2 rounded-l-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="Tìm kiếm đồng hồ ..."
+                className="flex-grow px-5 py-2 text-gray-700 focus:outline-none text-sm placeholder-gray-400"
             />
-            <button
-                type="submit"
-                className="bg-amber-500 text-slate-900 px-4 py-2 rounded-r-md font-bold hover:bg-amber-600 transition"
-            >
-                Tìm
+            <button type="submit" className="bg-accent text-white px-5 py-3 hover:bg-yellow-600 transition duration-300 flex items-center justify-center">
+                <FaSearch />
             </button>
         </form>
     );

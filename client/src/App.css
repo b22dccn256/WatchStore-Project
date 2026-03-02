@@ -1,0 +1,153 @@
+/* CSSreset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.header {
+    background-color: #0c1626;
+    /* Deep blue-black based on image_4.png */
+    color: white;
+    padding: 15px 0;
+    width: 100%;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.logo-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    width: 30px;
+    /* Adjust size based on image_4.png */
+    height: 30px;
+}
+
+.logo-text-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-title {
+    color: #d8b871;
+    /* Gold based on image_4.png */
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.logo-subtitle {
+    color: #aaaaaa;
+    /* Lighter white/grey based on image_4.png */
+    font-size: 0.8rem;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    /* Adjust spacing between menu items from image_4.png */
+}
+
+.nav-link {
+    color: #d8b871;
+    /* Gold based on image_4.png */
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.nav-link.active {
+    color: white;
+    /* Active state like image_4.png */
+}
+
+.actions-group {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    /* Adjust spacing from image_4.png */
+}
+
+.search-bar {
+    display: flex;
+    border: 1px solid #d8b871;
+    /* Gold border from image_4.png */
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.search-input {
+    background-color: transparent;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    width: 200px;
+    /* Adjust width from image_4.png */
+}
+
+.search-input::placeholder {
+    color: #aaaaaa;
+    /* Grey placeholder based on image_4.png */
+}
+
+.search-button {
+    background-color: #d8b871;
+    /* Gold based on image_4.png */
+    border: none;
+    color: #d8b871;
+    /* Gold icon in image_4.png */
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    width: 18px;
+    /* Adjust magnifying glass size from image_4.png */
+    height: 18px;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.action-link {
+    color: white;
+    /* Icon colors based on image_4.png */
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+.cart-container {
+    position: relative;
+}
+
+.cart-badge {
+    background-color: #d8b871;
+    /* Gold badge based on image_4.png */
+    color: #0c1626;
+    /* Dark background based on image_4.png */
+    border-radius: 50%;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 0.7rem;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

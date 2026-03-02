@@ -1,16 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import ReactDOM from 'react-dom/client';
 import React from 'react';
-import './index.css'
-import App from './App.jsx'
-import { CartProvider } from './context/CartContext.jsx'
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom'; // <--- 1. Import BrowserRouter
+import App from './App.jsx';
+import './index.css';
 import { HelmetProvider } from 'react-helmet-async';
+import { CartProvider } from './context/CartContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <HelmetProvider>
-      <App />
+      <CartProvider>
+        {/* 2. Bọc BrowserRouter quanh App */}
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </CartProvider>
     </HelmetProvider>
   </React.StrictMode>,
-)
+);
