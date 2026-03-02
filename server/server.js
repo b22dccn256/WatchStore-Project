@@ -17,6 +17,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const path = require('path');
+
+const uploadRoutes = require('./routes/uploadRoutes');
+
 // Middleware
 app.use(express.json()); // Để đọc được JSON từ body request
 app.use(cors()); // Chấp nhận request từ mọi nơi (hoặc config riêng cho client)
@@ -26,6 +30,13 @@ app.use(cors()); // Chấp nhận request từ mọi nơi (hoặc config riêng 
 app.use('/api/products', productRoutes); // <--- 2. Kích hoạt Route
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
+
+app.use('/api/upload', uploadRoutes); // <--- Kích hoạt Route upload
+
+// 4. BIẾN THƯ MỤC 'uploads' THÀNH STATIC (Công khai)
+// __dirname là thư mục hiện tại (server). Chúng ta lùi ra 1 cấp (..) để đến gốc dự án, rồi vào 'uploads'
+const dirname = path.resolve();
+app.use('/uploads', express.static(path.join(dirname, '/uploads')));
 
 // Database Connection
 connectDB(); // Tạm thời comment lại để test server chạy trước

@@ -53,7 +53,7 @@ function App() {
               <Route path="/admin/products" element={<ProductListPage />} />
               <Route path="/admin/product/:id/edit" element={<ProductEditPage />} />
               <Route path="/admin/orders" element={<OrderListPage />} />
-
+              <Route path="/admin/productlist/:pageNumber" element={<ProductListPage />} />
 
             </Routes>
           </main>
