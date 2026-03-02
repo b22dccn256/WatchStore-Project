@@ -6,7 +6,8 @@ const {
     getProductById,
     deleteProduct,
     createProduct,
-    updateProduct
+    updateProduct,
+    createProductReview
 } = require('../controllers/productController');
 
 const { protect, admin } = require('../middleware/authMiddleware');
@@ -15,6 +16,10 @@ const { protect, admin } = require('../middleware/authMiddleware');
 router.route('/')
     .get(getProducts)
     .post(protect, admin, createProduct); // Chỉ Admin mới được tạo sản phẩm mới
+
+
+//THÊM ROUTE REVIEW (Đặt TRƯỚC route /:id để tránh xung đột)
+router.route('/:id/reviews').post(protect, createProductReview);
 
 // Khi user gọi vào đường dẫn có ID (/:id) -> Chạy hàm getProductById
 // - GET: Ai cũng xem được (chi tiết sp)

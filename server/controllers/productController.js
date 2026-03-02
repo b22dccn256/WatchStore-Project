@@ -98,6 +98,50 @@ const updateProduct = async (req, res) => {
     }
 };
 
+// @desc    Tạo đánh giá mới
+// @route   POST /api/products/:id/reviews
+// @access  Private
+const createProductReview = async (req, res) => {
+    const { rating, comment } = req.body;
+
+    const product = await Product.findById(req.params.id);
+
+    if (product) {
+        // 1. Kiểm tra xem user này đã review chưa
+        const alreadyReviewed = product.reviews.find(
+            (r) => r.user.toString() === req.user._id.toString()
+        );
+
+        if (alreadyReviewed) {
+            res.status(400).json({ message: 'Bạn đã đánh giá sản phẩm này rồi' });
+            return; // Dừng lại ngay
+        }
+
+        // 2. Tạo review mới
+        const review = {
+            name: req.user.name,
+            rating: Number(rating),
+            comment,
+            user: req.user._id,
+        };
+
+        // 3. Đẩy vào mảng reviews của sản phẩm
+        product.reviews.push(review);
+
+        // 4. Cập nhật số lượng review
+        product.numReviews = product.reviews.length;
+
+        // 5. Tính lại điểm trung bình (Cộng tổng số sao chia cho số lượng)
+        product.rating =
+            product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+            product.reviews.length;
+
+        await product.save();
+        res.status(201).json({ message: 'Đã thêm đánh giá' });
+    } else {
+        res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
+    }
+};
 
 module.exports = {
     getProducts,
@@ -105,4 +149,5 @@ module.exports = {
     deleteProduct,
     createProduct,
     updateProduct,
+    createProductReview,
 };
